@@ -5,7 +5,7 @@ Plugin URI: https://blogvault.net
 Description: Easiest way to backup & secure your WordPress site
 Author: Backup by BlogVault
 Author URI: https://blogvault.net
-Version: 5.77
+Version: 5.81
 Network: True
  */
 
@@ -166,6 +166,15 @@ if ((array_key_exists('bvplugname', $_REQUEST)) && ($_REQUEST['bvplugname'] == "
 					$apbct->settings['forms__contact_forms_test'] = 0;
 				}
 			});
+
+			#handling of Akismet plugin
+			add_filter('akismet_get_api_key', function($api_key) { return null; }, PHP_INT_MAX);
+
+			#handling of Formidable Antispam
+			add_filter('frm_validate_entry', function($errors, $values, $args) {
+				unset($errors['spam']);
+				return $errors;
+			}, PHP_INT_MAX, 3);
 		} else {
 			define('BVBASEPATH', plugin_dir_path(__FILE__));
 
@@ -195,14 +204,14 @@ if ((array_key_exists('bvplugname', $_REQUEST)) && ($_REQUEST['bvplugname'] == "
 		if ($bvinfo->isProtectModuleEnabled()) {
 			require_once dirname( __FILE__ ) . '/protect/protect.php';
 			//For backward compatibility.
-			BVProtect_V577::$settings = new BVWPSettings();
-			BVProtect_V577::$db = new BVWPDb();
-			BVProtect_V577::$info = new BVInfo(BVProtect_V577::$settings);
+			BVProtect_V581::$settings = new BVWPSettings();
+			BVProtect_V581::$db = new BVWPDb();
+			BVProtect_V581::$info = new BVInfo(BVProtect_V581::$settings);
 
-			add_action('bv_clear_pt_config', array('BVProtect_V577', 'uninstall'));
+			add_action('bv_clear_pt_config', array('BVProtect_V581', 'uninstall'));
 
 			if ($bvinfo->isActivePlugin()) {
-				BVProtect_V577::init(BVProtect_V577::MODE_WP);
+				BVProtect_V581::init(BVProtect_V581::MODE_WP);
 			}
 		}
 

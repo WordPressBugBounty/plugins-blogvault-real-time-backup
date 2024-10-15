@@ -11,7 +11,7 @@ if (!class_exists('BVInfo')) :
 		public $ip_header_option = 'bvipheader';
 		public $brand_option = 'bv_whitelabel_infos';
 		public $wp_lp_whitelabel_option = 'bvLpWhitelabelConf';
-		public $version = '5.77';
+		public $version = '5.81';
 		public $webpage = 'https://blogvault.net';
 		public $appurl = 'https://app.blogvault.net';
 		public $slug = 'blogvault-real-time-backup/blogvault.php';
