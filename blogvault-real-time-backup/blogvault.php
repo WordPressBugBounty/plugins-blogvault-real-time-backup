@@ -5,7 +5,7 @@ Plugin URI: https://blogvault.net
 Description: Easiest way to backup & secure your WordPress site
 Author: Backup by BlogVault
 Author URI: https://blogvault.net
-Version: 6.48
+Version: 6.62
 Network: True
 License: GPLv2 or later
 License URI: [http://www.gnu.org/licenses/gpl-2.0.html](http://www.gnu.org/licenses/gpl-2.0.html)
@@ -70,6 +70,7 @@ add_action('bv_clear_bv_services_config', array($wp_action, 'clear_bv_services_c
 ##DISABLE_OTHER_OPTIMIZATION_PLUGINS##
 
 ##WPCLIMODULE##
+
 if (is_admin()) {
 	require_once dirname( __FILE__ ) . '/wp_admin.php';
 	$wpadmin = new BVWPAdmin($bvsettings, $bvsiteinfo);
@@ -89,8 +90,6 @@ if (is_admin()) {
 	##POPUP_ON_DEACTIVATION##
 	add_action('admin_notices', array($wpadmin, 'activateWarning'));
 	add_action('admin_enqueue_scripts', array($wpadmin, 'bvsecAdminMenu'));
-	##ALPURGECACHEFUNCTION##
-	##ALADMINMENU##
 }
 
 if ((array_key_exists('bvreqmerge', $_POST)) || (array_key_exists('bvreqmerge', $_GET))) { // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended
@@ -171,14 +170,14 @@ if (BVHelper::getRawParam('REQUEST', 'bvplugname') == "bvbackup") {
 		if ($bvinfo->isProtectModuleEnabled()) {
 			require_once dirname( __FILE__ ) . '/protect/protect.php';
 			//For backward compatibility.
-			BVProtect_V648::$settings = new BVWPSettings();
-			BVProtect_V648::$db = new BVWPDb();
-			BVProtect_V648::$info = new BVInfo(BVProtect_V648::$settings);
+			BVProtect_V662::$settings = new BVWPSettings();
+			BVProtect_V662::$db = new BVWPDb();
+			BVProtect_V662::$info = new BVInfo(BVProtect_V662::$settings);
 
-			add_action('bv_clear_pt_config', array('BVProtect_V648', 'uninstall'));
+			add_action('bv_clear_pt_config', array('BVProtect_V662', 'uninstall'));
 
 			if ($bvinfo->isActivePlugin()) {
-				BVProtect_V648::init(BVProtect_V648::MODE_WP);
+				BVProtect_V662::init(BVProtect_V662::MODE_WP);
 			}
 		}
 
