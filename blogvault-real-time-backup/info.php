@@ -11,7 +11,7 @@ if (!class_exists('BVInfo')) :
 		public $ip_header_option = 'bvipheader';
 		public $brand_option = 'bv_whitelabel_infos';
 		public $wp_lp_whitelabel_option = 'bvLpWhitelabelConf';
-		public $version = '6.62';
+		public $version = '6.65';
 		public $webpage = 'https://blogvault.net';
 		public $appurl = 'https://app.blogvault.net';
 		public $slug = 'blogvault-real-time-backup/blogvault.php';
@@ -64,14 +64,15 @@ if (!class_exists('BVInfo')) :
 			$bvsiteinfo = new BVWPSiteInfo();
 			$encoded_url = base64_encode($bvsiteinfo->siteurl());
 			$secret = BVRecover::defaultSecret($this->settings);
+			$tag = BVRecover::connectionTag($this->settings);
 
-			return base64_encode("v2:".$secret.":".$encoded_url.":".$this->plugname);
-		}
+			#No tag means this site has no salt material in wp-config.php, and there
+			#is no connection key that would be safe to hand out.
+			if (empty($secret) || empty($tag)) {
+				return null;
+			}
 
-		public function getDefaultSecret() {
-			require_once dirname( __FILE__ ) . '/recover.php';
-			$bvsiteinfo = new BVWPSiteInfo();
-			return BVRecover::defaultSecret($this->settings);
+			return base64_encode("v3:".$secret.":".$encoded_url.":".$this->plugname.":".$tag);
 		}
 
 		public function getLatestElementorDBVersion($file) {

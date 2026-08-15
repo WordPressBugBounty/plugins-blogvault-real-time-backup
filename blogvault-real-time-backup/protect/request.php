@@ -2,8 +2,8 @@
 
 if (!defined('ABSPATH') && !defined('MCDATAPATH')) exit;
 
-if (!class_exists('BVProtectRequest_V662')) :
-class BVProtectRequest_V662 {
+if (!class_exists('BVProtectRequest_V665')) :
+class BVProtectRequest_V665 {
 	public $ip;
 	public $host = '';
 	public $uri;
@@ -19,8 +19,8 @@ class BVProtectRequest_V662 {
 	public $raw_body = '';
 	public $files;
 	public $respcode;
-	public $status = BVProtectRequest_V662::STATUS_ALLOWED;
-	public $category = BVProtectRequest_V662::CATEGORY_NORMAL;
+	public $status = BVProtectRequest_V665::STATUS_ALLOWED;
+	public $category = BVProtectRequest_V665::CATEGORY_NORMAL;
 
 	public $wp_user;
 
@@ -59,7 +59,7 @@ class BVProtectRequest_V662 {
 	const CATEGORY_GLOBAL_BOT_BLOCKED = 90;
 
 	public function __construct($ip_header, $config) {
-		$this->ip = BVProtectUtils_V662::getIP($ip_header);
+		$this->ip = BVProtectUtils_V665::getIP($ip_header);
 		$this->timestamp = time();
 		$this->get_params = $_GET; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		$this->cookies = $_COOKIE;
@@ -141,15 +141,15 @@ class BVProtectRequest_V662 {
 
 	public static function blacklistedCategories() {
 		return array(
-			BVProtectRequest_V662::CATEGORY_BOT_BLOCKED,
-			BVProtectRequest_V662::CATEGORY_COUNTRY_BLOCKED,
-			BVProtectRequest_V662::CATEGORY_USER_BLACKLISTED,
-			BVProtectRequest_V662::CATEGORY_GLOBAL_BOT_BLOCKED
+			BVProtectRequest_V665::CATEGORY_BOT_BLOCKED,
+			BVProtectRequest_V665::CATEGORY_COUNTRY_BLOCKED,
+			BVProtectRequest_V665::CATEGORY_USER_BLACKLISTED,
+			BVProtectRequest_V665::CATEGORY_GLOBAL_BOT_BLOCKED
 		);
 	}
 
 	public static function whitelistedCategories() {
-		return array(BVProtectRequest_V662::CATEGORY_WHITELISTED);
+		return array(BVProtectRequest_V665::CATEGORY_WHITELISTED);
 	}
 
 	public function setRespCode($code) {
@@ -190,23 +190,12 @@ class BVProtectRequest_V662 {
 		return null;
 	}
 
-	private function getContentMediaType($content_type) {
-		if (!is_string($content_type)) {
-			return null;
-		}
-
-		$parts = explode(';', $content_type, 2);
-		$media_type = strtolower(trim($parts[0]));
-		return $media_type !== '' ? $media_type : null;
-	}
-
 	private function isJsonContentType($content_type) {
-		$media_type = $this->getContentMediaType($content_type);
-		if (!isset($media_type)) {
+		if (!is_string($content_type)) {
 			return false;
 		}
 
-		return preg_match('/^application\/(?:[\w!#$&^.+-]+\+)?json(?:\+oembed)?$/', $media_type) === 1;
+		return preg_match('/(^|\s|,)application\/([\w!#\$&-\^\.\+]+\+)?json(\+oembed)?($|\s|;|,)/i', $content_type) === 1;
 	}
 
 	private function normalizeHeaderName($name) {
@@ -498,7 +487,7 @@ class BVProtectRequest_V662 {
 			return;
 		}
 
-		$_json_params = BVProtectUtils_V662::safeDecodeJSON(
+		$_json_params = BVProtectUtils_V665::safeDecodeJSON(
 			$this->raw_body,
 			true,
 			$this->max_json_decode_depth

@@ -1,8 +1,8 @@
 <?php
 if (!defined('ABSPATH') && !defined('MCDATAPATH')) exit;
 
-if (!class_exists('BVProtectUtils_V662')) :
-class BVProtectUtils_V662 {
+if (!class_exists('BVProtectUtils_V665')) :
+class BVProtectUtils_V665 {
 	public static function getIP($ip_header) {
 		$ip = null;
 		if (is_array($ip_header)) {
@@ -130,7 +130,7 @@ class BVProtectUtils_V662 {
 
 		if (is_array($val)) {
 			foreach ($val as $e) {
-				$length += BVProtectUtils_V662::getLength($e);
+				$length += BVProtectUtils_V665::getLength($e);
 			}
 
 			return $length;

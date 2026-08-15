@@ -4,9 +4,9 @@ Tags: backup, staging, migration, cloud backup, clone
 Plugin URI: https://blogvault.net/
 Donate link: https://app.blogvault.net/home/signup
 Requires at least: 4.0
-Tested up to: 7.0
+Tested up to: 7.1
 Requires PHP: 7.0
-Stable tag: 6.62
+Stable tag: 6.65
 License: GPLv2 or later
 License URI: [http://www.gnu.org/licenses/gpl-2.0.html](http://www.gnu.org/licenses/gpl-2.0.html)
 
@@ -270,6 +270,13 @@ These are available on our website: [Terms of Service](https://blogvault.net/tos
 9. We power WordPress migration for WPEngine, Pantheon, FlyWheel, LiquidWeb, Cloudways, Savvii, and many more. Need we say more?
 
 == CHANGELOG ==
+= 6.65 =
+* Improvement: Enhanced secret generation using the secure random_int function.
+* Improvement: Improved connection key generation mechanism.
+* New: Added file-editing and modification hardening controls.
+* Tweak: Improved Uptime Monitoring with full-page checks.
+* Tweak: Improved firewall.
+
 = 6.62 =
 * Tweak: Firewall improvements.
 * Tweak: Table sync improvements.
