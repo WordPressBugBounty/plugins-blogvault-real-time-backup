@@ -53,7 +53,7 @@ if (!class_exists('BVWPAction')) :
 		}
 
 		public function clear_wp_2fa_config() {
-			$meta_keys = array('bv_2fa_enabled', 'bv_2fa_secret');
+			$meta_keys = array('bv_2fa_enabled', 'bv_2fa_secret', 'bv_2fa_method', 'bv_2fa_email_challenge', 'bv_2fa_email_rate', 'bv_2fa_attempts');
 			foreach ($meta_keys as $meta_key) {
 					$this->settings->deleteMetaData('user', null, $meta_key, '', true);
 			}

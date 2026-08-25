@@ -2,8 +2,8 @@
 
 if (!defined('ABSPATH') && !defined('MCDATAPATH')) exit;
 
-if (!class_exists('BVProtectRequest_V665')) :
-class BVProtectRequest_V665 {
+if (!class_exists('BVProtectRequest_V669')) :
+class BVProtectRequest_V669 {
 	public $ip;
 	public $host = '';
 	public $uri;
@@ -19,8 +19,8 @@ class BVProtectRequest_V665 {
 	public $raw_body = '';
 	public $files;
 	public $respcode;
-	public $status = BVProtectRequest_V665::STATUS_ALLOWED;
-	public $category = BVProtectRequest_V665::CATEGORY_NORMAL;
+	public $status = BVProtectRequest_V669::STATUS_ALLOWED;
+	public $category = BVProtectRequest_V669::CATEGORY_NORMAL;
 
 	public $wp_user;
 
@@ -59,7 +59,7 @@ class BVProtectRequest_V665 {
 	const CATEGORY_GLOBAL_BOT_BLOCKED = 90;
 
 	public function __construct($ip_header, $config) {
-		$this->ip = BVProtectUtils_V665::getIP($ip_header);
+		$this->ip = BVProtectUtils_V669::getIP($ip_header);
 		$this->timestamp = time();
 		$this->get_params = $_GET; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		$this->cookies = $_COOKIE;
@@ -141,15 +141,15 @@ class BVProtectRequest_V665 {
 
 	public static function blacklistedCategories() {
 		return array(
-			BVProtectRequest_V665::CATEGORY_BOT_BLOCKED,
-			BVProtectRequest_V665::CATEGORY_COUNTRY_BLOCKED,
-			BVProtectRequest_V665::CATEGORY_USER_BLACKLISTED,
-			BVProtectRequest_V665::CATEGORY_GLOBAL_BOT_BLOCKED
+			BVProtectRequest_V669::CATEGORY_BOT_BLOCKED,
+			BVProtectRequest_V669::CATEGORY_COUNTRY_BLOCKED,
+			BVProtectRequest_V669::CATEGORY_USER_BLACKLISTED,
+			BVProtectRequest_V669::CATEGORY_GLOBAL_BOT_BLOCKED
 		);
 	}
 
 	public static function whitelistedCategories() {
-		return array(BVProtectRequest_V665::CATEGORY_WHITELISTED);
+		return array(BVProtectRequest_V669::CATEGORY_WHITELISTED);
 	}
 
 	public function setRespCode($code) {
@@ -487,7 +487,7 @@ class BVProtectRequest_V665 {
 			return;
 		}
 
-		$_json_params = BVProtectUtils_V665::safeDecodeJSON(
+		$_json_params = BVProtectUtils_V669::safeDecodeJSON(
 			$this->raw_body,
 			true,
 			$this->max_json_decode_depth
