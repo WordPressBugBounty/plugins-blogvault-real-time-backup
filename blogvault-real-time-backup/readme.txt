@@ -6,7 +6,7 @@ Donate link: https://app.blogvault.net/home/signup
 Requires at least: 4.0
 Tested up to: 7.1
 Requires PHP: 7.0
-Stable tag: 6.69
+Stable tag: 6.72
 License: GPLv2 or later
 License URI: [http://www.gnu.org/licenses/gpl-2.0.html](http://www.gnu.org/licenses/gpl-2.0.html)
 
@@ -270,6 +270,9 @@ These are available on our website: [Terms of Service](https://blogvault.net/tos
 9. We power WordPress migration for WPEngine, Pantheon, FlyWheel, LiquidWeb, Cloudways, Savvii, and many more. Need we say more?
 
 == CHANGELOG ==
+= 6.72 =
+* Tweak: Added validation checks for input params.
+
 = 6.69 =
 * New: Added email-based two-factor authentication for WordPress users.
 
