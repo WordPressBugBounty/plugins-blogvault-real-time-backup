@@ -43,6 +43,7 @@ if (!class_exists('BVWPAction')) :
 			do_action('bv_clear_dynsync_config');
 			##CLEARCACHECONFIG##
 			do_action('bv_clear_bv_services_config');
+			do_action('bv_clear_actlog_config');
 			do_action('bv_clear_wp_2fa_config');
 			do_action('bv_remove_bv_preload_include');
 			do_action('bv_clear_php_error_config');

@@ -11,7 +11,7 @@ if (!class_exists('BVInfo')) :
 		public $ip_header_option = 'bvipheader';
 		public $brand_option = 'bv_whitelabel_infos';
 		public $wp_lp_whitelabel_option = 'bvLpWhitelabelConf';
-		public $version = '6.72';
+		public $version = '6.76';
 		public $webpage = 'https://blogvault.net';
 		public $appurl = 'https://app.blogvault.net';
 		public $slug = 'blogvault-real-time-backup/blogvault.php';
@@ -36,6 +36,14 @@ if (!class_exists('BVInfo')) :
 				return $bvconfig['db_version'];
 			}
 			return false;
+		}
+
+		# The server leases capture for a few days at a time; a stale configuration
+		# registers nothing.
+		public function isActivityLogActive() {
+			$config = isset($this->config['activity_log']) ? $this->config['activity_log'] : null;
+			return $this->hasValidDBVersion() && is_array($config) && !empty($config['hooks']) &&
+				isset($config['enabled_until']) && is_numeric($config['enabled_until']) && $config['enabled_until'] > time();
 		}
 
 		public function hasValidDBVersion() {

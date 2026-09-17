@@ -5,7 +5,7 @@ Plugin URI: https://blogvault.net
 Description: Easiest way to backup & secure your WordPress site
 Author: Backup by BlogVault
 Author URI: https://blogvault.net
-Version: 6.72
+Version: 6.76
 Network: True
 License: GPLv2 or later
 License URI: [http://www.gnu.org/licenses/gpl-2.0.html](http://www.gnu.org/licenses/gpl-2.0.html)
@@ -104,14 +104,11 @@ if ($bvinfo->config != false) {
 require_once dirname( __FILE__ ) . '/php_error_monitoring/monitoring.php';
 BVWPPHPErrorMonitoring::init();
 
-if ($bvinfo->hasValidDBVersion()) {
-	if ($bvinfo->isServiceActive('activity_log')) {
-		require_once dirname( __FILE__ ) . '/wp_actlog.php';
-		$bvconfig = $bvinfo->config;
-		$actlog = new BVWPActLog($bvdb, $bvsettings, $bvinfo, $bvconfig['activity_log']);
-		$actlog->init();
-	}
+require_once dirname( __FILE__ ) . '/wp_actlog.php';
+$actlog = new BVWPActLog($bvdb, $bvsettings, $bvinfo, $bvinfo->isActivityLogActive() ? $bvinfo->config['activity_log'] : array());
+$actlog->init();
 
+if ($bvinfo->hasValidDBVersion()) {
 	##MAINTENANCEMODULE##
 }
 
@@ -174,14 +171,14 @@ if (BVHelper::getRawParam('REQUEST', 'bvplugname') == "bvbackup") {
 		if ($bvinfo->isProtectModuleEnabled()) {
 			require_once dirname( __FILE__ ) . '/protect/protect.php';
 			//For backward compatibility.
-			BVProtect_V672::$settings = new BVWPSettings();
-			BVProtect_V672::$db = new BVWPDb();
-			BVProtect_V672::$info = new BVInfo(BVProtect_V672::$settings);
+			BVProtect_V676::$settings = new BVWPSettings();
+			BVProtect_V676::$db = new BVWPDb();
+			BVProtect_V676::$info = new BVInfo(BVProtect_V676::$settings);
 
-			add_action('bv_clear_pt_config', array('BVProtect_V672', 'uninstall'));
+			add_action('bv_clear_pt_config', array('BVProtect_V676', 'uninstall'));
 
 			if ($bvinfo->isActivePlugin()) {
-				BVProtect_V672::init(BVProtect_V672::MODE_WP);
+				BVProtect_V676::init(BVProtect_V676::MODE_WP);
 			}
 		}
 
