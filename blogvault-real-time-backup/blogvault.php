@@ -5,7 +5,7 @@ Plugin URI: https://blogvault.net
 Description: Easiest way to backup & secure your WordPress site
 Author: Backup by BlogVault
 Author URI: https://blogvault.net
-Version: 6.76
+Version: 6.81
 Network: True
 License: GPLv2 or later
 License URI: [http://www.gnu.org/licenses/gpl-2.0.html](http://www.gnu.org/licenses/gpl-2.0.html)
@@ -64,12 +64,18 @@ register_deactivation_hook(__FILE__, array($wp_action, 'deactivate'));
 
 add_action('wp_footer', array($wp_action, 'footerHandler'), 100);
 add_action('bv_clear_bv_services_config', array($wp_action, 'clear_bv_services_config'));
+add_action('bv_clear_mu_plugin', array($wp_action, 'clear_mu_plugin'));
 
 ##SOADDUNINSTALLACTION##
 
 ##DISABLE_OTHER_OPTIMIZATION_PLUGINS##
 
-##WPCLIMODULE##
+if (defined('WP_CLI') && WP_CLI) {
+		require_once dirname( __FILE__ ) . '/wp_cli.php';
+		$wp_cli = new BVWPCli($bvsettings, $bvinfo, $bvsiteinfo, $bvapi);
+		WP_CLI::add_command("blogvault", $wp_cli);
+}
+
 
 if (is_admin()) {
 	require_once dirname( __FILE__ ) . '/wp_admin.php';
@@ -151,8 +157,16 @@ if (BVHelper::getRawParam('REQUEST', 'bvplugname') == "bvbackup") {
 				$response->terminate($request->corruptedParamsResp());
 			}
 			$request->params = $params;
+			if (isset($request->pagenow)) {
+				$GLOBALS['pagenow'] = $request->pagenow;
+				if ($request->is_admin_ajax) {
+					$_SERVER['PHP_SELF'] = dirname($_SERVER['PHP_SELF']) . '/' . $request->pagenow;
+				}
+			}
 			$callback_handler = new BVCallbackHandler($bvdb, $bvsettings, $bvsiteinfo, $request, $account, $response);
-			if ($request->is_aftershutdown) {
+			if ($request->is_update_core_page) {
+				add_action('load-update-core.php', array($callback_handler, 'execute'), PHP_INT_MAX);
+			} else if ($request->is_aftershutdown) {
 				$callback_handler->deferExecutionUntilShutdown();
 			} else if ($request->is_afterload) {
 				add_action('wp_loaded', array($callback_handler, 'execute'));
@@ -171,14 +185,14 @@ if (BVHelper::getRawParam('REQUEST', 'bvplugname') == "bvbackup") {
 		if ($bvinfo->isProtectModuleEnabled()) {
 			require_once dirname( __FILE__ ) . '/protect/protect.php';
 			//For backward compatibility.
-			BVProtect_V676::$settings = new BVWPSettings();
-			BVProtect_V676::$db = new BVWPDb();
-			BVProtect_V676::$info = new BVInfo(BVProtect_V676::$settings);
+			BVProtect_V681::$settings = new BVWPSettings();
+			BVProtect_V681::$db = new BVWPDb();
+			BVProtect_V681::$info = new BVInfo(BVProtect_V681::$settings);
 
-			add_action('bv_clear_pt_config', array('BVProtect_V676', 'uninstall'));
+			add_action('bv_clear_pt_config', array('BVProtect_V681', 'uninstall'));
 
 			if ($bvinfo->isActivePlugin()) {
-				BVProtect_V676::init(BVProtect_V676::MODE_WP);
+				BVProtect_V681::init(BVProtect_V681::MODE_WP);
 			}
 		}
 

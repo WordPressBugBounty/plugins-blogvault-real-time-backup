@@ -11,7 +11,7 @@ if (!class_exists('BVInfo')) :
 		public $ip_header_option = 'bvipheader';
 		public $brand_option = 'bv_whitelabel_infos';
 		public $wp_lp_whitelabel_option = 'bvLpWhitelabelConf';
-		public $version = '6.76';
+		public $version = '6.81';
 		public $webpage = 'https://blogvault.net';
 		public $appurl = 'https://app.blogvault.net';
 		public $slug = 'blogvault-real-time-backup/blogvault.php';
@@ -240,11 +240,15 @@ if (!class_exists('BVInfo')) :
 		}
 
 		public function info() {
-			return array(
+			$info = array(
 				"bvversion" => $this->version,
 				"sha1" => "true",
 				"plugname" => $this->plugname
 			);
+			if (isset($GLOBALS['bv_mu_versions'][$this->plugname])) {
+				$info['mu_version'] = $GLOBALS['bv_mu_versions'][$this->plugname];
+			}
+			return $info;
 		}
 	}
 endif;

@@ -43,6 +43,7 @@ if (!class_exists('BVWPAction')) :
 			do_action('bv_clear_dynsync_config');
 			##CLEARCACHECONFIG##
 			do_action('bv_clear_bv_services_config');
+			do_action('bv_clear_mu_plugin');
 			do_action('bv_clear_actlog_config');
 			do_action('bv_clear_wp_2fa_config');
 			do_action('bv_remove_bv_preload_include');
@@ -52,6 +53,16 @@ if (!class_exists('BVWPAction')) :
 		public function clear_bv_services_config() {
 			$this->settings->deleteOption($this->bvinfo->services_option_name);
 		}
+
+		public function clear_mu_plugin() {
+			if (defined('WPMU_PLUGIN_DIR')) {
+				$mu_plugin_file = WPMU_PLUGIN_DIR . '/0-blogvault-mu-plugin.php';
+				if (file_exists($mu_plugin_file)) {
+					@unlink($mu_plugin_file);
+				}
+			}
+		}
+
 
 		public function clear_wp_2fa_config() {
 			$meta_keys = array('bv_2fa_enabled', 'bv_2fa_secret', 'bv_2fa_method', 'bv_2fa_email_challenge', 'bv_2fa_email_rate', 'bv_2fa_attempts');
