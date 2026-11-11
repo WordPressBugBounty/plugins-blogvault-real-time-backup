@@ -5,7 +5,7 @@ Plugin URI: https://blogvault.net
 Description: Easiest way to backup & secure your WordPress site
 Author: Backup by BlogVault
 Author URI: https://blogvault.net
-Version: 6.81
+Version: 6.83
 Network: True
 License: GPLv2 or later
 License URI: [http://www.gnu.org/licenses/gpl-2.0.html](http://www.gnu.org/licenses/gpl-2.0.html)
@@ -63,6 +63,7 @@ register_deactivation_hook(__FILE__, array($wp_action, 'deactivate'));
 
 
 add_action('wp_footer', array($wp_action, 'footerHandler'), 100);
+add_action('wp_enqueue_scripts', array($wp_action, 'enqueueBrokenLinkHighlight'));
 add_action('bv_clear_bv_services_config', array($wp_action, 'clear_bv_services_config'));
 add_action('bv_clear_mu_plugin', array($wp_action, 'clear_mu_plugin'));
 
@@ -185,14 +186,14 @@ if (BVHelper::getRawParam('REQUEST', 'bvplugname') == "bvbackup") {
 		if ($bvinfo->isProtectModuleEnabled()) {
 			require_once dirname( __FILE__ ) . '/protect/protect.php';
 			//For backward compatibility.
-			BVProtect_V681::$settings = new BVWPSettings();
-			BVProtect_V681::$db = new BVWPDb();
-			BVProtect_V681::$info = new BVInfo(BVProtect_V681::$settings);
+			BVProtect_V683::$settings = new BVWPSettings();
+			BVProtect_V683::$db = new BVWPDb();
+			BVProtect_V683::$info = new BVInfo(BVProtect_V683::$settings);
 
-			add_action('bv_clear_pt_config', array('BVProtect_V681', 'uninstall'));
+			add_action('bv_clear_pt_config', array('BVProtect_V683', 'uninstall'));
 
 			if ($bvinfo->isActivePlugin()) {
-				BVProtect_V681::init(BVProtect_V681::MODE_WP);
+				BVProtect_V683::init(BVProtect_V683::MODE_WP);
 			}
 		}
 
